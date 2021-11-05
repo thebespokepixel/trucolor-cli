@@ -1,0 +1,28 @@
+---
+engines:
+  duplication:
+    enabled: true
+    checks:
+      Similar code:
+        enabled: false
+    config:
+      languages:
+      - javascript
+  eslint:
+    enabled: true
+    config:
+      config: test/fixtures/config/.eslintrc
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "src/**.js"
+exclude_paths:
+- test/
+- docs/
+- bin/
+- media/
+- scripts/
+- index.js
+- index.mjs
+- gulpfile.js
