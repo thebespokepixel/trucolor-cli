@@ -1,6 +1,6 @@
 ![TruColor][logo]
 # trucolor-cli
-> A node module and CLI utility for using 24bit color SGR codes in modern terminals.
+> A cLI Wrapper for [trucolor][1]
 
 ${badges}
 
@@ -8,8 +8,5 @@ ${badges}
 
 ${usage}
 
-## Documentation
-Full documentation can be found at [https://thebespokepixel.github.io/trucolor/][1]
-
-[1]: https://thebespokepixel.github.io/trucolor/
+[1]: https://github.com/thebespokepixel/trucolor
 [logo]: https://raw.githubusercontent.com/thebespokepixel/trucolor/master/media/banner.png

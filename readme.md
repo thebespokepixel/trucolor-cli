@@ -1,6 +1,6 @@
 ![TruColor][logo]
 # trucolor-cli
-> A node module and CLI utility for using 24bit color SGR codes in modern terminals.
+> A cLI Wrapper for [trucolor][1]
 
 ##### Publishing Status
 
@@ -22,17 +22,10 @@
 ## Usage
 
 #### Installation
-##### Global version, for CLI use
-```shell
-npm install --global @thebespokepixel/trucolor
-```
 
-##### Module, for programmatic use
 ```shell
-npm install --save @thebespokepixel/trucolor
+npm install --global @thebespokepixel/trucolor-cli
 ```
-
-## CLI Usage
 
 #### Synopsis:
 
@@ -143,38 +136,6 @@ hsl-120-100-50: 00ff00
 apples: 005aff
 ```
 
-## Programmatic Usage
 
-```javascript
-
-import {trucolor, palette, chalkish, simple} from 'trucolor'
-
-const simpleColor = trucolor('bright red')
-console.log(`${simpleColor.in}simpleColor${simpleColor.out}`)
-
-const simplePalette = simple()
-console.log(`${simplePalette.red}simplePalette Red${simplePalette.red.out}`)
-console.log(`${simplePalette.blue}simplePalette Blue${simplePalette.blue.out}`)
-
-const myPalette = palette({}, {
-  red: '#F00',
-  blue: 'lighten 30 blue'
-})
-console.log(`${myPalette.red}myPalette Red${myPalette.red.out}`)
-console.log(`${myPalette.blue}myPalette Blue${myPalette.blue.out}`)
-
-const myChalkishPalette = chalkish(palette({}, {
-  red: '#F00',
-  blue: 'lighten 30 blue'
-}))
-console.log(myChalkishPalette.red('myChalkishPalette Red'))
-console.log(myChalkishPalette.blue('myChalkishPalette Blue'))
-
-```
-
-
-## Documentation
-Full documentation can be found at [https://thebespokepixel.github.io/trucolor/][1]
-
-[1]: https://thebespokepixel.github.io/trucolor/
+[1]: https://github.com/thebespokepixel/trucolor
 [logo]: https://raw.githubusercontent.com/thebespokepixel/trucolor/master/media/banner.png

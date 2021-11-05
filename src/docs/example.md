@@ -1,15 +1,8 @@
 #### Installation
-##### Global version, for CLI use
-```shell
-npm install --global @thebespokepixel/trucolor
-```
 
-##### Module, for programmatic use
 ```shell
-npm install --save @thebespokepixel/trucolor
+npm install --global @thebespokepixel/trucolor-cli
 ```
-
-## CLI Usage
 
 #### Synopsis:
 
@@ -118,33 +111,4 @@ TinkyWinky: 800080
 > trucolor hsl:120,100,50 apples: orange spin 180
 hsl-120-100-50: 00ff00
 apples: 005aff
-```
-
-## Programmatic Usage
-
-```javascript
-
-import {trucolor, palette, chalkish, simple} from 'trucolor'
-
-const simpleColor = trucolor('bright red')
-console.log(`${simpleColor.in}simpleColor${simpleColor.out}`)
-
-const simplePalette = simple()
-console.log(`${simplePalette.red}simplePalette Red${simplePalette.red.out}`)
-console.log(`${simplePalette.blue}simplePalette Blue${simplePalette.blue.out}`)
-
-const myPalette = palette({}, {
-  red: '#F00',
-  blue: 'lighten 30 blue'
-})
-console.log(`${myPalette.red}myPalette Red${myPalette.red.out}`)
-console.log(`${myPalette.blue}myPalette Blue${myPalette.blue.out}`)
-
-const myChalkishPalette = chalkish(palette({}, {
-  red: '#F00',
-  blue: 'lighten 30 blue'
-}))
-console.log(myChalkishPalette.red('myChalkishPalette Red'))
-console.log(myChalkishPalette.blue('myChalkishPalette Blue'))
-
 ```
