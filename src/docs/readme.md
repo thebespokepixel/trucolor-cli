@@ -1,6 +1,6 @@
 ![TruColor][logo]
 # trucolor-cli
-> A cLI Wrapper for [trucolor][1]
+> A CLI Wrapper for [trucolor][1]
 
 ${badges}
 

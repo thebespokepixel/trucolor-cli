@@ -1,6 +1,6 @@
 {
   "name": "trucolor-cli",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "TTY color toolkit supporting Truecolor (24bit RGB)",
   "author": "Mark Griffiths <mark@thebespokepixel.com> (http://thebespokepixel.com/)",
   "main": "index.js",
@@ -26,7 +26,7 @@
     "lodash": "^4.17.21",
     "read-pkg": "^7.0.0",
     "term-ng": "^3.0.3",
-    "trucolor": "^4.0.2",
+    "trucolor": "^4.0.3",
     "truwrap": "^4.0.2",
     "update-notifier": "^5.1.0",
     "verbosity": "^3.0.2",

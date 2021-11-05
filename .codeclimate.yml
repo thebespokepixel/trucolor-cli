@@ -20,9 +20,6 @@ ratings:
 exclude_paths:
 - test/
 - docs/
-- bin/
 - media/
-- scripts/
-- index.js
-- index.mjs
-- gulpfile.js
+- trucolor.js
+

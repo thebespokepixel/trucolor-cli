@@ -4,6 +4,11 @@ import test from 'ava'
 
 const execPromise = promisify(exec)
 
+test('No color is Error', async t => {
+	const error = await t.throwsAsync(execPromise('./trucolor.js'))
+	t.is(error.code, 1)
+})
+
 test('Named color is red = ff0000', async t => {
 	const {stdout} = await execPromise('./trucolor.js --color=16m red')
 	t.is(stdout, 'ff0000')
@@ -57,4 +62,39 @@ test('bold red = --bold ff0000', async t => {
 test('red as rgb() = rgb(255, 0, 0)', async t => {
 	const {stdout} = await execPromise('./trucolor.js --color=16m --rgb red')
 	t.is(stdout, 'rgb(255, 0, 0)')
+})
+
+test('purple message', async t => {
+	const {stdout} = await execPromise('./trucolor.js --color=16m --message Test purple')
+	t.is(stdout, '\u001B[38;2;128;0;128mTest\u001B[39m')
+})
+
+test('green in', async t => {
+	const {stdout} = await execPromise('./trucolor.js --color=16m --in green')
+	t.is(stdout, '\u001B[38;2;0;128;0m')
+})
+
+test('green out', async t => {
+	const {stdout} = await execPromise('./trucolor.js --color=16m --out green')
+	t.is(stdout, '\u001B[39m')
+})
+
+test('bold red type none', async t => {
+	const {stdout} = await execPromise('./trucolor.js --type none --color=16m bold red')
+	t.is(stdout, ' ff0000')
+})
+
+test('bold red type direct', async t => {
+	const {stdout} = await execPromise('./trucolor.js --type direct --color=16m bold red')
+	t.is(stdout, '--bold ff0000')
+})
+
+test('bold red type fish', async t => {
+	const {stdout} = await execPromise('./trucolor.js --type fish --color=16m bold red')
+	t.is(stdout, '--bold ff0000')
+})
+
+test('violet swatch', async t => {
+	const {stdout} = await execPromise('./trucolor.js --color=16m --swatch violet')
+	t.is(stdout, '\u001B[38;2;238;130;238m\u2588\u2588\u001B[39m')
 })
