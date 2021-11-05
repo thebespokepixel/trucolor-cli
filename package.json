@@ -67,8 +67,7 @@
     "test": "xo && c8 --reporter=text ava",
     "doc-build": "echo 'Skipping docs...'",
     "readme": "compile-readme -u src/docs/example.md src/docs/readme.md > readme.md",
-    "coverage": "c8 --reporter=lcov ava; open coverage/lcov-report/index.html",
-    "prepublishOnly": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly"
+    "coverage": "c8 --reporter=lcov ava; open coverage/lcov-report/index.html"
   },
   "xo": {
     "semicolon": false,
