@@ -10,8 +10,9 @@ import terminalFeatures from 'term-ng'
 import {stripIndent} from 'common-tags'
 import {truwrap, createImage} from 'truwrap'
 import {names} from '@thebespokepixel/es-tinycolor'
-import {clr, colorReplacer, spectrum} from '../lib/colour.js'
-import {metadata, palette} from '..'
+import {palette} from 'trucolor'
+import {metadata} from '../index.js'
+import {clr, colorReplacer, spectrum} from './colour.js'
 
 /**
  * Render help when asked for.
@@ -19,14 +20,14 @@ import {metadata, palette} from '..'
  * @param {Object} helpPage Object of page sections
  * @return {undefined} Writes help to stdout.
  */
-export default function help(yargs, helpPage) {
+export default async function help(yargsInstance, helpPage) {
 	const images = (function () {
 		if (terminalFeatures.images) {
 			return {
 				space: '\t',
 				cc: createImage({
 					name: 'logo',
-					file: join(dirname(fileURLToPath(import.meta.url)), '/../media/CCLogo.png'),
+					file: join(dirname(fileURLToPath(import.meta.url)), 'media/bytetree.png'),
 					height: 3,
 				}),
 			}
@@ -54,8 +55,8 @@ export default function help(yargs, helpPage) {
 				case terminalFeatures.font.enhanced:
 					return [
 						colorReplacer`${'red| ━┳━╸     '}${'bright|╭──╮  ╷'}`,
-						colorReplacer`${'blue|  ┃ ┏━┓╻ ╻'}${'bright|│  ╭─╮│╭─╮╭─╮'}`,
-						colorReplacer`${'green|  ╹ ╹  ┗━┛'}${'bright|╰──╰─╯╵╰─╯╵  '}`,
+						colorReplacer`${'green|  ┃ ┏━┓╻ ╻'}${'bright|│  ╭─╮│╭─╮╭─╮'}`,
+						colorReplacer`${'blue|  ╹ ╹  ┗━┛'}${'bright|╰──╰─╯╵╰─╯╵  '}`,
 					]
 				case terminalFeatures.font.basic:
 					return [
@@ -86,6 +87,7 @@ export default function help(yargs, helpPage) {
 
 	const epilogue = stripIndent(colorReplacer)`
 		${`title|${metadata.copyright}`}. ${`grey|Released under the ${metadata.license} License.`}
+		${'grey|An Open Source component from ByteTree.com\'s terminal visualisation toolkit'}
 		${`grey|Issues?: ${metadata.bugs}`}
 	`
 	const pages = {
@@ -212,16 +214,19 @@ export default function help(yargs, helpPage) {
 			}),
 			more: stripIndent(colorReplacer)`
 				${'title|Custom Names:'}
-				Any color definition can be prefixed with a 'name:' so palettes can be output.
+				Any color definition can be prefixed with a 'name:' so palettes can be output
 
-					> ${`command|${metadata.bin}`} ${clr.argument}bob: black lighten 50 saturate 50 spin 180${clr.normal}
-					40BFBF
+					> ${`command|${metadata.bin}`} ${clr.argument}one: red desaturate 50 spin 60 two: green spin 30${clr.normal}
+					one: bf40bf
+					two: 408000
 
-					> ${`command|${metadata.bin}`} ${'option|--rgb'} ${'argument|bob:'}
-					rgb(64, 191, 191)
+					> ${`command|${metadata.bin}`} ${'option|--rgb'} ${'argument|one: red desaturate 50 spin 60 two: green spin 30:'}
+					one: rgb(191, 64, 191)
+					two: rgb(64, 128, 0)
 
-					> ${`command|${metadata.bin}`} ${'option|--swatch'} ${clr.argument}bob:${clr.normal}
-					${clr.bob}\u2588\u2588${clr.normal}
+					> ${`command|${metadata.bin}`} ${'option|--swatch'} ${clr.argument}one: red desaturate 50 spin 60 two: green spin 30${clr.normal}
+					one: ${clr.one}\u2588\u2588${clr.normal}
+					two: ${clr.two}\u2588\u2588${clr.normal}
 			`,
 		},
 		named: {
@@ -381,8 +386,9 @@ export default function help(yargs, helpPage) {
 		}
 	})(helpPage)
 
-	yargs.usage('')
-	yargs.wrap(contentWidth)
+	// Yargs.usage('')
+
+	const usageContent = yargsInstance.wrap(renderer.getWidth()).getHelp()
 
 	container.break()
 	container.write(images.cc.render({
@@ -392,7 +398,7 @@ export default function help(yargs, helpPage) {
 	container.write(header()).break()
 	container.write(spectrum(windowWidth, '—')).break()
 	renderer.write(synopsis)
-	renderer.write(yargs.getUsageInstance().help()).break(2)
+	renderer.write(await usageContent).break(2)
 	renderer.write(page.usage).break(2)
 	renderer.write(colorReplacer`${'title|Examples:'}`).break()
 	renderer.panel(page.examples(contentWidth), page.layout(contentWidth)).break(2)

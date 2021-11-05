@@ -1,25 +1,82 @@
 {
-  "name": "trucolor",
-  "version": "3.0.1",
+  "name": "trucolor-cli",
+  "version": "0.0.1",
   "description": "TTY color toolkit supporting Truecolor (24bit RGB)",
   "author": "Mark Griffiths <mark@thebespokepixel.com> (http://thebespokepixel.com/)",
   "main": "index.js",
-  "types": "index.d.ts",
   "type": "module",
   "bin": {
-    "trucolor": "./bin/trucolor"
+    "trucolor": "./trucolor.js"
   },
   "files": [
-    "index.js",
-    "index.d.ts",
-    "bin/"
+    "media"
   ],
   "bugs": {
-    "url": "https://github.com/thebespokepixel/trucolor/issues"
+    "url": "https://github.com/thebespokepixel/trucolor-cli/issues"
   },
   "copyright": {
     "year": "2021",
     "owner": "The Bespoke Pixel"
+  },
+  "dependencies": {
+    "@thebespokepixel/es-tinycolor": "^3.0.4",
+    "@thebespokepixel/meta": "^3.0.4",
+    "@thebespokepixel/string": "^2.0.1",
+    "common-tags": "^1.8.0",
+    "lodash": "^4.17.21",
+    "read-pkg": "^7.0.0",
+    "term-ng": "^3.0.3",
+    "trucolor": "^4.0.2",
+    "truwrap": "^4.0.2",
+    "update-notifier": "^5.1.0",
+    "verbosity": "^3.0.2",
+    "yargs": "^17.2.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@thebespokepixel/badges": "^4.0.7",
+    "@types/estree": "^0.0.50",
+    "ava": "^4.0.0-rc.1",
+    "c8": "^7.10.0",
+    "rollup": "^2.59.0",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "xo": "^0.46.4"
+  },
+  "engines": {
+    "node": ">=14.0"
+  },
+  "homepage": "https://github.com/thebespokepixel/trucolor-cli",
+  "keywords": [
+    "color",
+    "24bit",
+    "truecolor",
+    "SGR",
+    "ansi",
+    "command line",
+    "fish"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebespokepixel/trucolor-cli.git"
+  },
+  "scripts": {
+    "build": "rollup -c && chmod 755 trucolor.js && npm run readme",
+    "test": "xo && c8 --reporter=text ava",
+    "doc-build": "echo 'Skipping docs...'",
+    "readme": "compile-readme -u src/docs/example.md src/docs/readme.md > readme.md",
+    "coverage": "c8 --reporter=lcov ava; open coverage/lcov-report/index.html",
+    "prepublishOnly": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly"
+  },
+  "xo": {
+    "semicolon": false,
+    "ignores": [
+      "trucolor.js",
+      "docs/**",
+      "coverage/**"
+    ]
   },
   "config": {
     "cli": {
@@ -62,84 +119,18 @@
       }
     }
   },
-  "dependencies": {
-    "@thebespokepixel/es-tinycolor": "^3.0.4",
-    "@thebespokepixel/meta": "^3.0.4",
-    "@thebespokepixel/string": "^2.0.1",
-    "color-convert": "^2.0.1",
-    "common-tags": "^1.8.0",
-    "escape-string-regexp": "^5.0.0",
-    "lodash": "^4.17.21",
-    "read-pkg": "^7.0.0",
-    "sgr-composer": "^3.0.0",
-    "term-ng": "^3.0.3",
-    "truwrap": "^4.0.2",
-    "update-notifier": "^5.1.0",
-    "verbosity": "^3.0.2",
-    "yargs": "^17.2.1"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.6",
-    "@types/estree": "^0.0.50",
-    "ava": "^4.0.0-rc.1",
-    "c8": "^7.10.0",
-    "documentation-theme-bespoke": "^2.0.12",
-    "rollup": "^2.59.0",
-    "rollup-plugin-cleanup": "^3.2.1",
-    "semver-regex": "^4.0.2",
-    "xo": "^0.46.4"
-  },
-  "engines": {
-    "node": ">=14.0"
-  },
-  "homepage": "https://github.com/thebespokepixel/trucolor",
-  "keywords": [
-    "color",
-    "24bit",
-    "truecolor",
-    "SGR",
-    "ansi",
-    "command line",
-    "fish"
-  ],
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/thebespokepixel/trucolor.git"
-  },
-  "scripts": {
-    "build": "rollup -c && chmod 755 trucolor.js && npm run readme",
-    "test": "xo && c8 --reporter=text ava",
-    "doc-serve": "documentation serve --watch --theme node_modules/documentation-theme-bespoke --github --config src/docs/documentation.yml --project-name $npm_package_name  --project-version $npm_package_version src/index.js",
-    "doc-build": "documentation build --format html --output docs --theme node_modules/documentation-theme-bespoke --github --config src/docs/documentation.yml --project-name $npm_package_name  --project-version $npm_package_version src/index.js",
-    "readme": "compile-readme -u src/docs/example.md src/docs/readme.md > readme.md",
-    "coverage": "c8 --reporter=lcov ava; open coverage/lcov-report/index.html",
-    "prepublishOnly": "npx -p typescript tsc index.js --declaration --allowJs --emitDeclarationOnly"
-  },
-  "xo": {
-    "semicolon": false,
-    "ignores": [
-      "index.js",
-      "trucolor.js",
-      "index.d.ts",
-      "docs/**",
-      "coverage/**"
-    ]
-  },
   "badges": {
     "github": "thebespokepixel",
     "npm": "thebespokepixel",
     "libraries-io": "TheBespokePixel",
-    "name": "trucolor",
+    "name": "trucolor-cli",
     "codeclimate": "5f8c6c4143841284dc75",
     "providers": {
       "aux1": {
         "title": "github",
         "text": "source",
         "color": "4E73B6",
-        "link": "https://github.com/thebespokepixel/trucolor"
+        "link": "https://github.com/thebespokepixel/trucolor-cli"
       }
     },
     "readme": {

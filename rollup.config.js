@@ -8,7 +8,7 @@ const external = id => !id.startsWith('src') && !id.startsWith('.') && !id.start
 const config = {
 	external,
 	plugins: [resolve(), json({preferConst: true}), commonjs(), cleanup()],
-	input: 'src/cli/index.js',
+	input: 'src/index.js',
 	output: {
 		banner: '#! /usr/bin/env node',
 		file: 'trucolor.js',

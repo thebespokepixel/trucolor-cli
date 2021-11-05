@@ -1,8 +1,10 @@
 /* ─────────╮
  │ trucolor │ CLI
  ╰──────────┴─────────────────────────────────────────────────────────────────── */
-/* eslint unicorn/no-process-exit:0, no-process-exit:0, quotes:0 */
+/* eslint unicorn/no-process-exit:0, no-process-exit:0, node/prefer-global/process: [error] */
 
+import {dirname} from 'node:path'
+import {fileURLToPath} from 'node:url'
 import yargs from 'yargs'
 import {hideBin} from 'yargs/helpers' // eslint-disable-line node/file-extension-in-import
 import updateNotifier from 'update-notifier'
@@ -10,13 +12,15 @@ import {createConsole} from 'verbosity'
 import meta from '@thebespokepixel/meta'
 import {box} from '@thebespokepixel/string'
 import {stripIndent} from 'common-tags'
-import pkg from '../../package.json'
-import {colorReplacer} from '../lib/colour'
-import help from './help'
-import {parse, render} from '..'
+import {readPackageSync} from 'read-pkg'
+import {parse, render} from 'trucolor'
+import {colorReplacer} from './lib/colour.js'
+import help from './lib/help.js'
 
 const console = createConsole({outStream: process.stderr})
-const metadata = meta(dirname(fileURLToPath(import.meta.url)))
+export const metadata = meta(dirname(fileURLToPath(import.meta.url)))
+
+const pkg = readPackageSync()
 
 const yargsInstance = yargs(hideBin(process.argv))
 	.strictOptions()
@@ -25,58 +29,67 @@ const yargsInstance = yargs(hideBin(process.argv))
 	.options({
 		h: {
 			alias: 'help',
-			describe: 'Display this help.'
+			describe: 'Display this help.',
 		},
 		v: {
 			alias: 'version',
 			count: true,
-			describe: 'Return the current version on stdout. -vv Return name & version.'
+			describe: 'Return the current version on stdout. -vv Return name & version.',
 		},
 		V: {
 			alias: 'verbose',
 			count: true,
-			describe: 'Be verbose. -VV Be loquacious.'
+			describe: 'Be verbose. -VV Be loquacious.',
 		},
 		m: {
 			alias: 'message',
 			nargs: 1,
-			describe: 'Format message with SGR codes'
+			describe: 'Format message with SGR codes',
 		},
 		i: {
 			alias: 'in',
 			boolean: true,
-			describe: 'Output SGR color escape code.'
+			describe: 'Output SGR color escape code.',
 		},
 		o: {
 			alias: 'out',
 			boolean: true,
-			describe: 'Output cancelling SGR color escape code.'
+			describe: 'Output cancelling SGR color escape code.',
 		},
 		t: {
 			alias: 'type',
 			choices: ['none', 'direct', 'fish'],
-			describe: 'CLI styling flags output.',
+			describe: 'CLI color styling flags output.',
 			default: 'direct',
-			requiresArg: true
+			requiresArg: true,
 		},
 		r: {
 			alias: 'rgb',
 			boolean: true,
-			describe: 'Output color as rgb(r, g, b).'
+			describe: 'Output color as rgb(r, g, b).',
 		},
 		s: {
 			alias: 'swatch',
 			boolean: true,
-			describe: 'Output an isolated color swatch.'
+			describe: 'Output an isolated color swatch.',
 		},
 		color: {
-			describe: 'Force color depth --color=256|16m. Disable with --no-color'
-		}
-	}).showHelpOnFail(false, `Use 'trucolor --help' for help.`)
+			describe: 'Force color depth --color=256|16m. Disable with --no-color',
+		},
+	}).showHelpOnFail(false, 'Use \'trucolor --help\' for help.')
 
 const {argv} = yargsInstance
 
-global.trucolorCLItype = argv.type
+const colorFlags = (type => {
+	switch (type) {
+		case undefined:
+			return {}
+		case 'default':
+			return pkg.config.cli[pkg.config.cli.selected]
+		default:
+			return pkg.config.cli[type]
+	}
+})(argv.type)
 
 if (argv.version) {
 	process.stdout.write(`${metadata.version(argv.version)}\n`)
@@ -88,14 +101,14 @@ if (argv.verbose) {
 		borderColor: 'green',
 		margin: {
 			bottom: 1,
-			top: 1
+			top: 1,
 		},
 		padding: {
 			bottom: 0,
 			top: 0,
 			left: 2,
-			right: 2
-		}
+			right: 2,
+		},
 	}
 
 	const titling = mode => stripIndent(colorReplacer)`
@@ -120,7 +133,7 @@ if (argv.verbose) {
 
 if (!(process.env.USER === 'root' && process.env.SUDO_USER !== process.env.USER)) {
 	updateNotifier({
-		pkg
+		pkg,
 	}).notify()
 }
 
@@ -136,16 +149,17 @@ if (argv.help) {
 
 	const buffer = parse(argv._.join(' '))
 		.map(color => render(color, {
-			format: 'cli'
+			format: 'cli',
+			colorFlags,
 		}))
 
 	const isList = buffer.length > 1
 
-	buffer.forEach(color => {
+	for (const color of buffer) {
 		if (console.canWrite(4)) {
 			console.log('')
 			console.pretty(color, {
-				depth: 2
+				depth: 2,
 			})
 		}
 
@@ -179,5 +193,5 @@ if (argv.help) {
 			default:
 				process.stdout.write(`${output}${color}${lineBreak}`)
 		}
-	})
+	}
 }

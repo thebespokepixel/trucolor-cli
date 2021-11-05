@@ -1,4 +1,5 @@
 ![TruColor][logo]
+# trucolor-cli
 > A node module and CLI utility for using 24bit color SGR codes in modern terminals.
 
 ${badges}
